@@ -1,28 +1,18 @@
-FROM alpine as build
+FROM ubuntu
 
-ARG MAVEN_VERSION=3.6.3
-ARG USER_HOME_DIR="/root"
-ARG BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
-
-
-# Install Java.
-RUN apk --update --no-cache add openjdk7 curl
-
-RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
- && curl -fsSL -o /tmp/apache-maven.tar.gz ${BASE_URL}/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
- && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
- && rm -f /tmp/apache-maven.tar.gz \
- && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
-
-ENV MAVEN_HOME /usr/share/maven
-ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
-
-# Define working directory.
-WORKDIR /data
-
-# Define commonly used JAVA_HOME variable
-ENV JAVA_HOME /usr/lib/jvm/default-jvm/
-
-# Define default command.
+RUN apt-get update -y
+RUN wget https://download.java.net/java/GA/jdk13.0.1/cec27d702aa74d5a8630c65ae61e4305/9/GPL/openjdk-13.0.1_linux-x64_bin.tar.gz
+RUN tar -xvf openjdk-13.0.1_linux-x64_bin.tar.gz
+RUN mv jdk-13.0.1 /opt/
+RUN JAVA_HOME='/opt/jdk-13.0.1'
+RUN PATH="$JAVA_HOME/bin:$PATH"
+RUN export PATH
+CMD ["java", "--version"]
+RUN wget https://mirrors.estointernet.in/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+RUN tar -xvf apache-maven-3.6.3-bin.tar.gz
+RUN mv apache-maven-3.6.3 /opt/
+RUN M2_HOME='/opt/apache-maven-3.6.3'
+RUN PATH="$M2_HOME/bin:$PATH"
+RUN export PATH
 CMD ["mvn", "--version"]
-CMD ["mvn", "compile package spring-boot:run"]
+
