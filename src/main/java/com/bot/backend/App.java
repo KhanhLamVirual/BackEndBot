@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import arc.util.Log;
+import mindustry.maps.Maps;
 
 import com.bot.backend.components.ContentHandler;
 import com.bot.backend.components.ResourceUtils;
@@ -33,8 +34,8 @@ public class App
 
         try {
             Map<String, Object> json = new HashMap<>();
-            var map = ContentHandler.parseMap(new File(path.replace("%2F", "/").replace("=", "")));
-            var image = ContentHandler.parseMapImage(map);
+            mindustry.maps.Map map = ContentHandler.parseMap(new File(path.replace("%2F", "/").replace("=", "")));
+            byte[] image = ContentHandler.parseMapImage(map);
 
             
             
