@@ -36,8 +36,6 @@ public class App
             Map<String, Object> json = new HashMap<>();
             mindustry.maps.Map map = ContentHandler.parseMap(new File(path.replace("%2F", "/").replace("=", "")));
             byte[] image = ContentHandler.parseMapImage(map);
-
-            
             
             json.put("name", map.name());
             json.put("description", map.description());
