@@ -5,6 +5,7 @@ RUN apt-get install openjdk-17-jdk -y
 RUN apt-get install maven wget -y
 COPY . .
 
+RUN mvn dependency:tree
 RUN mvn compile package
 
 FROM openjdk:17-jdk-slim
