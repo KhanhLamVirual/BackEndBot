@@ -1,5 +1,8 @@
 package com.bot.backend;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,16 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import arc.util.Log;
+import mindustry.Vars;
 import mindustry.maps.Maps;
 
-import com.bot.backend.components.ContentHandler;
-import com.bot.backend.components.ResourceUtils;
-
-import static com.bot.backend.Vars.*;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Hello world!
@@ -28,39 +24,31 @@ import java.util.Map;
 public class App 
 {
 
-    @PostMapping("/map")
-    public Object map(@RequestBody String path)
+    @PostMapping("/ping")
+    public Map<String, Object> ping(@RequestBody Map<String, Object> jsonpost)
     {
-
-        try {
-            Map<String, Object> json = new HashMap<>();
-            mindustry.maps.Map map = ContentHandler.parseMap(new File(path.replace("%2F", "/").replace("=", "")));
-            byte[] image = ContentHandler.parseMapImage(map);
-            
-            json.put("name", map.name());
-            json.put("description", map.description());
-            json.put("author", map.author());
-            json.put("range", map.height + "x" + map.width);
-            json.put("image", image);
-
-            return json;
-
-        } catch (Exception e)  {
-            e.printStackTrace();
-            return null;
-        }
+        Map<String, Object> data = new HashMap<>();
+        String host = (String)jsonpost.get("host");
+        int port = (int)jsonpost.get("port");
+        ServerHandler.pingHost(host, port, (h) -> {
+            data.put("name", h.name);
+            data.put("desc", h.description);
+            data.put("map", h.mapname);
+            data.put("version", h.version);
+            data.put("vertype", h.versionType);
+            data.put("mode", h.modeName);
+            data.put("wave", h.wave);
+            data.put("players", h.players);
+            data.put("maxPlayer", h.playerLimit);
+            data.put("ping", h.ping);
+        }, (e) -> {
+            data.put("error", "serveroffline");
+        });
+        return data;
     }
 
     public static void main( String[] args )
     {   
-        cache.delete();
-
-        dataDirectory.mkdirs();
-        cache.mkdirs();
-        resources.mkdirs();
-        sprites.mkdirs();
-
-        ResourceUtils.init();
         SpringApplication.run(App.class, args);
     }
 }

@@ -1,6 +1,2 @@
-/data/data/com.termux/files/home/BackEndBot/src/main/java/com/bot/backend/components/ImageRegion.java
 /data/data/com.termux/files/home/BackEndBot/src/main/java/com/bot/backend/App.java
-/data/data/com.termux/files/home/BackEndBot/src/main/java/com/bot/backend/components/ResourceUtils.java
-/data/data/com.termux/files/home/BackEndBot/src/main/java/com/bot/backend/components/SchematicBatch.java
-/data/data/com.termux/files/home/BackEndBot/src/main/java/com/bot/backend/Vars.java
-/data/data/com.termux/files/home/BackEndBot/src/main/java/com/bot/backend/components/ContentHandler.java
+/data/data/com.termux/files/home/BackEndBot/src/main/java/com/bot/backend/ServerHandler.java
